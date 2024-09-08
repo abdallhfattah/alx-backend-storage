@@ -7,25 +7,19 @@ from pymongo import MongoClient
 
 
 def log_stats():
-    """ log_stats.
-    """
-    client = MongoClient('mongodb://127.0.0.1:27017')
+    """log_stats."""
+    client = MongoClient("mongodb://127.0.0.1:27017")
     logs_collection = client.logs.nginx
     total = logs_collection.count_documents({})
-    get = logs_collection.count_documents({"method": "GET"})
-    post = logs_collection.count_documents({"method": "POST"})
-    put = logs_collection.count_documents({"method": "PUT"})
-    patch = logs_collection.count_documents({"method": "PATCH"})
-    delete = logs_collection.count_documents({"method": "DELETE"})
-    path = logs_collection.count_documents(
-        {"method": "GET", "path": "/status"})
-    print(f"{total} logs")
+    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
     print("Methods:")
-    print(f"\tmethod GET: {get}")
-    print(f"\tmethod POST: {post}")
-    print(f"\tmethod PUT: {put}")
-    print(f"\tmethod PATCH: {patch}")
-    print(f"\tmethod DELETE: {delete}")
+    for method in methods:
+        result = logs_collection.count_documents({"method": method})
+        print(f"\tmethod {method}: {result}")
+
+    path = logs_collection.count_documents({"method": "GET",
+                                           "path": "/status"})
+    print(f"{total} logs")
     print(f"{path} status check")
 
 
