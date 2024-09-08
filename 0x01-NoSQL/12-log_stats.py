@@ -3,16 +3,16 @@
 
 from pymongo import MongoClient
 
+
 def nginx_stats():
     """
     Connects to the MongoDB logs database and retrieves statistics about the nginx logs.
     """
     # Connect to MongoDB
-    client = MongoClient()
+    client = MongoClient('mongodb://127.0.0.1:27017')
 
     # Access the 'logs' database and 'nginx' collection
-    db = client.logs
-    nginx_collection = db.nginx
+    nginx_collection = client.logs.nginx
 
     # Count the total number of logs
     total_logs = nginx_collection.count_documents({})
