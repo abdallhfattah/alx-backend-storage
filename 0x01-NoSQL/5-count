@@ -1,0 +1,2 @@
+// counting
+db.school.CountDocuments()
