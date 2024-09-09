@@ -36,19 +36,24 @@ def call_history(method: Callable) -> Callable:
 
 
 def replay(fn: Callable) -> None:
+    """replaying what was called from some function : fn"""
     if fn is None or not hasattr(fn, "__self__"):
         return
+
     redis_storage = getattr(fn.__self__, "_redis")
 
     if not isinstance(redis_storage, redis.Redis):
         return
-
+    count = 0
     fun_name = fn.__qualname__
+
+    if redis_storage.exists(fun_name):
+        count = int(redis_storage.get(fun_name))
 
     inputs = redis_storage.lrange(f"{fun_name}:inputs", 0, -1)
     outputs = redis_storage.lrange(f"{fun_name}:outputs", 0, -1)
 
-    print(f"{fun_name} was called {len(inputs)} times:")
+    print("{} was called {} times:".format(fun_name, count))
 
     for inp, out in zip(inputs, outputs):
         print("{}(*{}) -> {}".format(fun_name, inp, out))
