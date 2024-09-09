@@ -12,8 +12,10 @@ redis_stroage = redis.Redis()
 
 
 def cache(method: Callable) -> Callable:
+    """caching results out from pages"""
     @wraps(method)
     def wrapper(url: str) -> str:
+        """ wrapper of the get page """
         redis_stroage.incr(f"count:{url}")
         result = redis_stroage.get(f"result:{url}")
         if result:
@@ -27,4 +29,5 @@ def cache(method: Callable) -> Callable:
 
 @cache
 def get_page(url: str) -> str:
+    """ requesting a page """
     return requests.get(url).text
