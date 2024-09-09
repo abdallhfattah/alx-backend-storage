@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-  module to get some content from web
-  saves it in redis 
-"""
+""" module to get some content from web saves it in redis """
 import requests
 import redis
 from functools import wraps
