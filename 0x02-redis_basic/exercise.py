@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""module for caching and utilizing the power of redis"""
 import redis
 import uuid
 from typing import Union, Callable, Any
@@ -36,7 +36,7 @@ def call_history(method: Callable) -> Callable:
 
 
 def replay(fn: Callable) -> None:
-    """replaying what was called from some function : fn"""
+    """replaying what was called from some function"""
     if fn is None or not hasattr(fn, "__self__"):
         return
 
