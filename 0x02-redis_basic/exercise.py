@@ -21,7 +21,7 @@ def count_calls(method: Callable) -> Callable:
 
 def call_history(method: Callable) -> Callable:
     @wraps(method)
-    def wrapper(self, *args, **kwargs):
+    def wrapper(self, *args, **kwargs) -> Any:
         """Returns the method's output after storing its inputs and output."""
         func_name = method.__qualname__
         inputs_key = f"{func_name}:inputs"
