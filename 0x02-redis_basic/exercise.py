@@ -44,6 +44,7 @@ def replay(fn: Callable) -> None:
 
     if not isinstance(redis_storage, redis.Redis):
         return
+
     count = 0
     fun_name = fn.__qualname__
 
@@ -56,7 +57,7 @@ def replay(fn: Callable) -> None:
     print("{} was called {} times:".format(fun_name, count))
 
     for inp, out in zip(inputs, outputs):
-        print("{}(*{}) -> {}".format(fun_name, inp, out))
+        print("{}(*{}) -> {}".format(fun_name, inp.decode("utf-8"), out))
 
 
 class Cache:
