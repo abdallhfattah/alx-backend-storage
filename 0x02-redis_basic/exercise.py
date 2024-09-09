@@ -19,6 +19,21 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """Returns the method's output after storing its inputs and output."""
+        func_name = method.__qualname__
+        inputs_key = f"{func_name}:inputs"
+        outputs_key = f"{func_name}:outputs"
+
+        self._redis.rpush(inputs_key, str(args))
+        result = method(*args, **kwargs)
+        self._redis.r.rpush(outputs_key, str(result))
+        return result
+    return wrapper
+
+
 class Cache:
     """caching class"""
 
@@ -27,6 +42,7 @@ class Cache:
         self._redis.flushdb(True)
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
