@@ -9,8 +9,8 @@ class Cache:
     """caching class"""
 
     def __init__(self):
-        _redis = redis.Redis()
-        _redis.flushdb()
+        self._redis = redis.Redis()
+        self._redis.flushdb(True)
 
     def store(self, data: Union[str, bytes, int, float]) -> uuid.UUID:
         key = uuid.uuid1()
