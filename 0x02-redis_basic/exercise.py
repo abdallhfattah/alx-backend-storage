@@ -48,16 +48,16 @@ def replay(fn: Callable) -> None:
     count = 0
     fun_name = fn.__qualname__
 
-    if redis_storage.exists(fun_name):
+    if redis_storage.exists(fun_name) != 0:
         count = int(redis_storage.get(fun_name))
 
     inputs = redis_storage.lrange(f"{fun_name}:inputs", 0, -1)
     outputs = redis_storage.lrange(f"{fun_name}:outputs", 0, -1)
 
-    print("{} was called {} times:".format(fun_name, count))
+    print('{} was called {} times:'.format(fun_name, count))
 
     for inp, out in zip(inputs, outputs):
-        print("{}(*{}) -> {}".format(fun_name, inp.decode("utf-8"), out))
+        print('{}(*{}) -> {}'.format(fun_name, inp.decode("utf-8"), out))
 
 
 class Cache:
