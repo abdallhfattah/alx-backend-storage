@@ -13,6 +13,6 @@ class Cache:
         _redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> uuid.UUID:
-        random_key = uuid.uuid1()
-        _redis.set(random_key, data)
-        return random_key
+        key = uuid.uuid1()
+        self._redis.set(key, data)
+        return key
